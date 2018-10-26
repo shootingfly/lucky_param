@@ -6,20 +6,20 @@ module LuckyParam
       ->(_obj) { true }
     ],
     String: [
-      ->(obj) { obj =~ /\w/ },
+      ->(obj) { !obj.empty? },
       "must be valid String"
     ],
     Integer: [
-      ->(obj) { obj =~ /\d+/ },
+      ->(obj) { obj.to_i.to_s == obj },
       "must be valid Integer"
     ],
-    Email: [
-      ->(obj) { obj =~ /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ },
-      "must be valid Email"
-    ],
     Float: [
-      ->(obj) { obj =~ /^(-?\d+)(\.\d+)?$/ },
+      ->(obj) { obj.to_f.to_s == obj },
       "must be valid Float"
+    ],
+    Email: [
+      ->(obj) { obj =~ /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
+      "must be valid Email"
     ],
     Timestamp: [
       ->(obj) { obj =~ /^(\+|\-)?\d+$/ },

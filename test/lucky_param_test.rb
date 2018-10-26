@@ -27,7 +27,7 @@ class LuckyParamTest < Minitest::Test
     end
   end
 
-  def test_wrong_format
+  def test_success
     params = {
       username: "test",
       password: "123456"
