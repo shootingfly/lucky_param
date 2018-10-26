@@ -20,22 +20,22 @@ module LuckyParam
     raise ParamMissError, column unless params.key?(column)
 
     message = _checker_message(column, checker_type)
-    raise ParamFormatError, message if message.present?
+    raise ParamFormatError, message if message
   end
 
   def optional(column, checker_type = :NONE)
     return unless params.key?(column)
 
     message = _checker_message(column, checker_type)
-    raise ParamFormatError, message if message.present?
+    raise ParamFormatError, message if message
   end
 
   def _checker_message(column, checker_type)
     checker = CUSTOM_CHECKER[checker_type] if LuckyParam.const_defined?(:CUSTOM_CHECKER)
-    checker ||= CHECKER.fetch(checker_type) { raise "Unknown checker `#{checker_type}`, try to define checker with const `LuckyParam::CUSTOM_CHECKER`" }
+    checker ||= CHECKER.fetch(checker_type) {
+      raise "Unknown checker `#{checker_type}`, try to define checker with const `LuckyParam::CUSTOM_CHECKER`"
+    }
     result = checker[0].call(params[column])
-    return if result.present?
-
-    checker[1]
+    result ? nil : checker[1]
   end
 end
