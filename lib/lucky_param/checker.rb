@@ -6,16 +6,23 @@ module LuckyParam
       ->(_obj) { true }
     ],
     String: [
-      ->(obj) { !obj.empty? },
+      ->(obj) { obj.is_a?(String) },
       "must be valid String"
     ],
+    Boolean: [
+      ->(obj) { %w[true false 1 0].include?(obj.to_s) },
+      "must be one of [true false 1 0]"
+    ],
     Integer: [
-      ->(obj) { obj.to_i.to_s == obj },
+      ->(obj) { obj.to_s =~ /\A(0|[1-9]\d*)\Z$/ },
       "must be valid Integer"
     ],
     Float: [
-      ->(obj) { obj.to_f.to_s == obj },
+      ->(obj) { obj.to_s =~ /\A^[-+]?[0-9]+([,.][0-9]+)?\Z$/ },
       "must be valid Float"
+    ],
+    Number: [
+      ->(obj) { Float(obj) rescue false }
     ],
     Email: [
       ->(obj) { obj =~ /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
