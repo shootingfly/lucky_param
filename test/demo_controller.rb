@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "lucky_param"
+
 class DemoController
   include LuckyParam
   LuckyParam::CUSTOM_CHECKER = {

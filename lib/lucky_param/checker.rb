@@ -31,11 +31,11 @@ module LuckyParam
       end
     ],
     Email: [
-      ->(params, column) { params[column] =~ /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
+      ->(params, column) { params[column].to_s =~ /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
       "must be valid Email"
     ],
     Timestamp: [
-      ->(params, column) { params[column] =~ /^(\+|\-)?\d+$/ },
+      ->(params, column) { params[column].to_s =~ /^(\+|\-)?\d+$/ },
       "must be valid Timestamp"
     ],
     ArrayJSON: [
