@@ -53,7 +53,7 @@ module LuckyParam
       lambda do |params, column|
         begin
           params[column] = JSON.parse(params[column]) if params[column].is_a?(String)
-          params[column].is_a?(ActionController::Parameters)
+          params[column].respond_to?(:to_hash)
         rescue StandardError
           false
         end
