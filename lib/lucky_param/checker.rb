@@ -3,53 +3,61 @@
 module LuckyParam
   CHECKER = {
     NONE: [
-      ->(_obj) { true }
+      ->(params, column) { true }
     ],
     String: [
-      ->(obj) { obj.is_a?(String) },
+      ->(params, column) { params[column].is_a?(String) },
       "must be valid String"
     ],
     Boolean: [
-      ->(obj) { %w[true false 1 0].include?(obj.to_s) },
+      ->(params, column) { %w[true false 1 0].include?(params[column].to_s) },
       "must be one of [true false 1 0]"
     ],
     Integer: [
-      ->(obj) { obj.to_s =~ /\A(0|[1-9]\d*)\Z$/ },
+      ->(params, column) { params[column].to_s =~ /\A(0|[1-9]\d*)\Z$/ },
       "must be valid Integer"
     ],
     Float: [
-      ->(obj) { obj.to_s =~ /\A^[-+]?[0-9]+([,.][0-9]+)?\Z$/ },
+      ->(params, column) { params[column].to_s =~ /\A^[-+]?[0-9]+([,.][0-9]+)?\Z$/ },
       "must be valid Float"
     ],
     Number: [
-      ->(obj) { Float(obj) rescue false }
+      lambda do |params, column|
+        begin
+          Float(params[column])
+        rescue StandardError
+          false
+        end
+      end
     ],
     Email: [
-      ->(obj) { obj =~ /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
+      ->(params, column) { params[column] =~ /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
       "must be valid Email"
     ],
     Timestamp: [
-      ->(obj) { obj =~ /^(\+|\-)?\d+$/ },
+      ->(params, column) { params[column] =~ /^(\+|\-)?\d+$/ },
       "must be valid Timestamp"
     ],
     ArrayJSON: [
-      lambda { |obj|
+      lambda do |params, column|
         begin
-          JSON.parse(obj).is_a?(Array)
+          params[column] = JSON.parse(params[column]) if params[column].is_a?(String)
+          params[column].is_a?(Array)
         rescue StandardError
           false
         end
-      },
+      end,
       "must be valid Array JSON"
     ],
     HashJSON: [
-      lambda { |obj|
+      lambda do |params, column|
         begin
-          JSON.parse(obj).is_a?(Hash)
+          params[column] = JSON.parse(params[column]) if params[column].is_a?(String)
+          params[column].is_a?(ActionController::Parameters)
         rescue StandardError
           false
         end
-      },
+      end,
       "must be valid Hash JSON"
     ]
   }.freeze

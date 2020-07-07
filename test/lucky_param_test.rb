@@ -33,6 +33,6 @@ class LuckyParamTest < Minitest::Test
       password: "123456"
     }
     result = DemoController.new(params).create
-    assert_equal params[:username], result
+    assert_equal "test", result
   end
 end

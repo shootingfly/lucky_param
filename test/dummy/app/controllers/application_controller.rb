@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   include LuckyParam
   LuckyParam::CUSTOM_CHECKER = {
     password: [
-      ->(obj) { obj =~ /([0-9a-zA-Z]){6,30}/ },
+      ->(params, column) { params[column] =~ /([0-9a-zA-Z]){6,30}/ },
       "must be valid password"
     ]
   }.freeze

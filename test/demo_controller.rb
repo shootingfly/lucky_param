@@ -5,7 +5,7 @@ class DemoController
   include LuckyParam
   LuckyParam::CUSTOM_CHECKER = {
     Password: [
-      ->(obj) { obj =~ /([1-9a-zA-Z]){6,21}/ },
+      ->(params, column) { params[column] =~ /([1-9a-zA-Z]){6,21}/ },
       "must be valid password"
     ]
   }.freeze

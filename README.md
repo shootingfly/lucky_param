@@ -22,7 +22,7 @@ class ApplicationController
   # If necessary, you can overide or define your own parameter checkers.
   LuckyParam::CUSTOM_CHECKER = {
     Password: [
-      ->(obj) { obj =~ /([0-9a-zA-Z]){6,30}/ },
+      ->(params, column) { params[column] =~ /([0-9a-zA-Z]){6,30}/ },
       "must be valid password"
     ],
   }.freeze
